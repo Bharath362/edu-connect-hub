@@ -59,7 +59,7 @@ const AdminEmails = () => {
   const handleTransfer = async () => {
     if (!transferEmail) return;
     setLoading(true);
-    const { error } = await supabase.rpc('transfer_primary_admin', { new_email: transferEmail.toLowerCase() });
+    const { error } = await (supabase.rpc as any)('transfer_primary_admin', { new_email: transferEmail.toLowerCase() });
     if (error) toast.error(error.message);
     else {
       toast.success('Primary admin transferred');
