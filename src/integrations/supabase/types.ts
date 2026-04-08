@@ -70,6 +70,24 @@ export type Database = {
           },
         ]
       }
+      primary_admin: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -207,6 +225,10 @@ export type Database = {
         Returns: boolean
       }
       is_admin_email: { Args: { _email: string }; Returns: boolean }
+      transfer_primary_admin: {
+        Args: { new_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "teacher" | "student"
