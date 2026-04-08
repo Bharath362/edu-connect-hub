@@ -38,23 +38,6 @@ const Auth = () => {
     setLoading(false);
   };
 
-  const handleMagicLink = async () => {
-    if (!email) {
-      toast.error('Please enter your email');
-      return;
-    }
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin },
-    });
-    if (error) toast.error(error.message);
-    else {
-      setMagicLinkSent(true);
-      toast.success('Magic link sent! Check your email.');
-    }
-    setLoading(false);
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
