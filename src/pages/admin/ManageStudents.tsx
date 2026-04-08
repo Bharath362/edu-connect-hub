@@ -11,6 +11,7 @@ import { Users, Search, UserPlus, Trash2 } from 'lucide-react';
 const ManageStudents = () => {
   const [students, setStudents] = useState<{ user_id: string; full_name: string; email: string }[]>([]);
   const [allUsers, setAllUsers] = useState<{ user_id: string; full_name: string; email: string }[]>([]);
+  const [adminUserIds, setAdminUserIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
 
   const fetchStudents = async () => {
@@ -26,7 +27,12 @@ const ManageStudents = () => {
     setAllUsers(data || []);
   };
 
-  useEffect(() => { fetchStudents(); fetchUsers(); }, []);
+  const fetchAdmins = async () => {
+    const { data } = await supabase.from('user_roles').select('user_id').eq('role', 'admin');
+    setAdminUserIds(new Set((data || []).map(r => r.user_id)));
+  };
+
+  useEffect(() => { fetchStudents(); fetchUsers(); fetchAdmins(); }, []);
 
   const assign = async (userId: string) => {
     const { error } = await supabase.from('user_roles').insert({ user_id: userId, role: 'student' as any });
@@ -41,7 +47,12 @@ const ManageStudents = () => {
   };
 
   const studentIds = new Set(students.map(s => s.user_id));
-  const nonStudents = allUsers.filter(u => !studentIds.has(u.user_id) && u.email.toLowerCase().includes(search.toLowerCase()));
+  // Hide admins from student assignment list
+  const nonStudents = allUsers.filter(u => 
+    !studentIds.has(u.user_id) && 
+    !adminUserIds.has(u.user_id) && 
+    u.email.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <DashboardLayout>
