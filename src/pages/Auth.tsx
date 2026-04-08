@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { GraduationCap, Mail, Lock, User } from 'lucide-react';
+import { GraduationCap, Lock, User, Mail } from 'lucide-react';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
